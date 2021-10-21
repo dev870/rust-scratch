@@ -21,7 +21,7 @@ fn main() {
     // file's cursor's offset at 0
     let mut second_reader = BufReader::new(&second_file);
     let input_schema = infer_json_schema(&mut second_reader, None).unwrap();
-    read_schema_from_file("schema.txt");
+    //read_schema_from_file("schema.txt");
     let schema = read_schema_from_file("schema.txt");
     assert_eq!(schema.to_json(), input_schema.to_json())
 }
@@ -29,7 +29,8 @@ fn main() {
 fn write_schema_to_file(mut reader: std::io::BufReader<&std::fs::File>, file_path: &str) {
     let inferred_schema = infer_json_schema(&mut reader, None).unwrap();  
     let schema_file = File::create(file_path).unwrap();
-    write!(&schema_file, "{:?}", inferred_schema.to_json()).unwrap();
+    //println!("{}", serde_json::to_string(&inferred_schema).unwrap());
+    write!(&schema_file, "{}", serde_json::to_string(&inferred_schema).unwrap());
 }
 
 fn read_schema_from_file(file_path: &str)  -> arrow::datatypes::Schema {
@@ -37,7 +38,7 @@ fn read_schema_from_file(file_path: &str)  -> arrow::datatypes::Schema {
     let mut reader = BufReader::new(schema_file);
     let mut jsonstr = String::new();
     reader.read_to_string(&mut jsonstr).unwrap();
-    println!("{:?}", jsonstr);
-    let json = serde_json::from_str(&jsonstr).unwrap();
-    Schema::from(&json).unwrap()
+    //println!("{}", jsonstr);
+    let schema: Schema = serde_json::from_str(&jsonstr).unwrap();
+    schema
 }
