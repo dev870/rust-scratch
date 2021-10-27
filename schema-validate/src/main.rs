@@ -11,7 +11,7 @@ fn main() {
     // file's cursor's offset at 0
     let reader = BufReader::new(&file);
     // write the input schema to schema.txt file.
-    write_schema_to_file(reader, "schema.txt");
+    write_schema_to_file(reader, "./data/schema.txt");
     // seek back to start so that the original file is usable again
     file.seek(SeekFrom::Start(0)).unwrap();
 
@@ -22,7 +22,7 @@ fn main() {
     let mut second_reader = BufReader::new(&second_file);
     let input_schema = infer_json_schema(&mut second_reader, None).unwrap();
     //read_schema_from_file("schema.txt");
-    let schema = read_schema_from_file("schema.txt");
+    let schema = read_schema_from_file("./data/schema.txt");
     assert_eq!(schema.to_json(), input_schema.to_json())
 }
 

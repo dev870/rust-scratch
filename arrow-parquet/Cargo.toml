@@ -1,5 +1,5 @@
 [package]
-name = "rust-scratch-space"
+name = "arrow-parquet"
 version = "0.1.0"
 edition = "2018"
 
@@ -8,3 +8,4 @@ edition = "2018"
 [dependencies]
 arrow = "6.0.0"
 serde_json = "1.0.68"
+parquet = "6.0.0"
