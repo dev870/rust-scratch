@@ -1,2 +1,3 @@
 /schema-validate/target
 /arrow-parquet/target
+/datafusion-parquet/target
