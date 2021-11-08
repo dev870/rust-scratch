@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
         .sql(
             "SELECT a, b \
         FROM sample_data \
-        WHERE d > 1"
+        WHERE d > 9"
         ).unwrap();
 
     // print the results
