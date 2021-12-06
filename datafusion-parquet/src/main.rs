@@ -17,9 +17,9 @@ async fn main() -> Result<()> {
     // execute the query
     let df = ctx
         .sql(
-            "SELECT a, b \
+            "SELECT * \
         FROM sample_data \
-        WHERE d > 9"
+        WHERE guardrails_file_cache_preload_disabled = true"
         ).unwrap();
 
     // print the results

@@ -16,6 +16,7 @@ fn main() {
         let inferred_schema = infer_json_schema(&mut reader, None).unwrap();
         file.seek(SeekFrom::Start(0)).unwrap();
         let mut json = json::Reader::new(BufReader::new(file), Arc::new(inferred_schema), 1024, None);
+        println!("{:?}", json);
         let batch = json.next().unwrap().unwrap();
         
         // let mut file2 = File::open("./data/input2.json").unwrap();
@@ -48,7 +49,7 @@ fn main() {
         let file_reader = SerializedFileReader::new(file).unwrap();
         let mut arrow_reader = ParquetFileArrowReader::new(Arc::new(file_reader));
  
-        println!("Converted arrow schema is: {}", arrow_reader.get_schema().unwrap());
+        println!("\nConverted arrow schema is: {}", arrow_reader.get_schema().unwrap());
         println!("Arrow schema after projection is: {}",
         arrow_reader.get_schema_by_columns(vec![0], true).unwrap());
 
