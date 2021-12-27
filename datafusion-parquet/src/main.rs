@@ -1,5 +1,8 @@
 use datafusion::error::Result;
 use datafusion::prelude::*;
+use datafusion::datasource::listing::ListingOptions;
+use datafusion::datasource::file_format::parquet::ParquetFormat;
+use std::sync::Arc;
 
 /// This example demonstrates executing a simple query against an Arrow data source (Parquet) and
 /// fetching results
@@ -7,23 +10,27 @@ use datafusion::prelude::*;
 async fn main() -> Result<()> {
     // create local execution context
     let mut ctx = ExecutionContext::new();
+    let file_format = ParquetFormat::default().with_enable_pruning(true);
 
-    // register parquet file with the execution context
-    ctx.register_parquet(
-        "sample_data",
-        "./data/data.parquet",
-    ).unwrap();
+    let listing_options = ListingOptions {
+        file_extension: ".parquet".to_owned(),
+        format: Arc::new(file_format),
+        table_partition_cols: vec![],
+        collect_stat: true,
+        target_partitions: 1,
+    };
 
+    ctx.register_listing_table(
+        "my_table",
+        &format!("file://{}", "./data/"),
+        listing_options,
+        None,
+    ).await.unwrap();
+    
     // execute the query
-    let df = ctx
-        .sql(
-            "SELECT * \
-        FROM sample_data \
-        WHERE guardrails_file_cache_preload_disabled = true"
-        ).unwrap();
+    let df = ctx.sql("SELECT * FROM my_table where d < 3 or d > 33").await?;
 
     // print the results
-    let batches = df.collect().await?;
-    print!("{}", batches[0].num_rows());
+    df.show().await?;
     Ok(())
 }

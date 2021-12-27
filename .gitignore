@@ -3,3 +3,4 @@
 /datafusion-parquet/target
 /lazy/target
 /flatten-json/target
+/pipe/target

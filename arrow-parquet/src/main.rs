@@ -11,7 +11,7 @@ use parquet::file::reader::SerializedFileReader;
 use parquet::arrow::{ParquetFileArrowReader, ArrowReader};
 
 fn main() {
-        let mut file = File::open("./data/input1.json").unwrap();
+        let mut file = File::open("./data/input2.json").unwrap();
         let mut reader = BufReader::new(&file);
         let inferred_schema = infer_json_schema(&mut reader, None).unwrap();
         file.seek(SeekFrom::Start(0)).unwrap();
@@ -37,7 +37,7 @@ fn main() {
         // println!("{}", new_batch.num_rows());
 
         let parquet_file = File::create("./data/data.parquet").unwrap();
-        let mut file1 = File::open("./data/input1.json").unwrap();
+        let mut file1 = File::open("./data/input2.json").unwrap();
         let mut reader1 = BufReader::new(&file1);
         let inferred_schema_clone = infer_json_schema(&mut reader1, None).unwrap();
         let props = WriterProperties::builder().build();
