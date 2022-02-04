@@ -1,8 +1,8 @@
 use datafusion::error::Result;
 use datafusion::prelude::*;
-use datafusion::datasource::listing::ListingOptions;
 use datafusion::datasource::file_format::parquet::ParquetFormat;
 use std::sync::Arc;
+use datafusion::datasource::S3Options;
 
 /// This example demonstrates executing a simple query against an Arrow data source (Parquet) and
 /// fetching results
@@ -12,23 +12,21 @@ async fn main() -> Result<()> {
     let mut ctx = ExecutionContext::new();
     let file_format = ParquetFormat::default().with_enable_pruning(true);
 
-    let listing_options = ListingOptions {
-        file_extension: ".parquet".to_owned(),
-        format: Arc::new(file_format),
-        table_partition_cols: vec![],
-        collect_stat: true,
-        target_partitions: 1,
-    };
+    let scheme = "s3";
 
-    ctx.register_listing_table(
-        "my_table",
-        &format!("file://{}", "./data/"),
-        listing_options,
-        None,
-    ).await.unwrap();
-    
+    let s3_store = 
+         Arc::new(MinioStore::new(s3_options.endpoint.to_string() ,
+            s3_options.access_key.to_string(), 
+            s3_options.secret_key.to_string(), 
+            s3_options.bucket.to_string()));
+
+    ctx.register_object_store(scheme,  s3_store);
+ 
+    // let df = ctx.read_parquet(path).await?;
+    ctx.register_object_store(scheme, s3_store);
+
     // execute the query
-    let df = ctx.sql("SELECT COUNT(*) FROM my_table where country = 'China'").await?;
+    let df = ctx.sql("SELECT * FROM my_table where d < 3 or d > 33").await?;
 
     // print the results
     df.show().await?;
