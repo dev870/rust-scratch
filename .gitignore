@@ -5,3 +5,4 @@
 /flatten-json/target
 /pipe/target
 /datafusion-object/target
+/datafusion-s3/target

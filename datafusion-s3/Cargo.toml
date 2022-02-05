@@ -1,0 +1,22 @@
+[package]
+edition = "2021"
+name = "datafusion-s3"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+arrow = {version = "8.0.0", features = ["prettyprint"]}
+async-trait = "0.1.52"
+aws-config = "0.6.0"
+aws-sdk-s3 = "0.6.0"
+aws-smithy-async = "0.36.0"
+aws-smithy-types = "0.36.0"
+aws-smithy-types-convert = {version = "0.36.0", features = ["convert-chrono"]}
+aws-types = "0.6.0"
+bytes = "1.1.0"
+datafusion = { git = "https://github.com/apache/arrow-datafusion", rev = "7b8d72c5342610a40827f23df7d5604cf24133fd" }
+futures = "0.3.19"
+http = "0.2.6"
+num_cpus = "1.13.1"
+tokio = {version = "1.0", features = ["macros", "rt", "rt-multi-thread", "sync", "fs"]}
